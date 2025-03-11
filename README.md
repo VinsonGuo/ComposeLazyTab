@@ -34,71 +34,22 @@ dependencies {
 
 ## Usage
 
-### Basic Usage
-
-```kotlin
-// In your composable
-var selectedTabIndex by remember { mutableStateOf(0) }
-
-LazyTabContainer(
-    selectedTabIndex = selectedTabIndex,
-    tabContents = listOf(
-        { HomeScreen() },
-        { ProfileScreen() },
-        { SettingsScreen() }
-    )
-)
-```
-
-### With Preloading & Persistence Options
 
 ```kotlin
 LazyTabContainer(
+    modifier = Modifier
+        .fillMaxSize()
+        .padding(paddingValues),
     selectedTabIndex = selectedTabIndex,
-    preloadAdjacent = true,  // Preload adjacent tabs for smoother transitions
-    persistTabs = false,     // Unload tabs when not visible to save memory
+    persistTabs = true, // Keep tabs in memory after loading
+    preloadAdjacent = false, // Not to preload adjacent tabs
     tabContents = listOf(
-        { HomeScreen() },
-        { ProfileScreen() },
-        { SettingsScreen() }
+        { HomeTabContent() },
+        { ProfileTabContent() },
+        { SettingsTabContent() }
     )
 )
 ```
-
-### Using with Bottom Navigation
-
-```kotlin
-Scaffold(
-    bottomBar = {
-        BottomNavigation {
-            BottomNavigationItem(
-                icon = { Icon(Icons.Default.Home, contentDescription = "Home") },
-                label = { Text("Home") },
-                selected = selectedTabIndex == 0,
-                onClick = { selectedTabIndex = 0 }
-            )
-            // Other navigation items...
-        }
-    }
-) { paddingValues ->
-    LazyTabContainer(
-        selectedTabIndex = selectedTabIndex,
-        paddingValues = paddingValues,
-        tabContents = listOf(
-            { HomeScreen() },
-            { ProfileScreen() },
-            { SettingsScreen() }
-        )
-    )
-}
-```
-
-## Sample App
-
-Check out the [sample app](app/) to see LazyCompose in action. The sample app demonstrates lazy loading behavior with simulated loading times for each tab.
-
-
-### Using the Visibility Component
 
 The `Visibility` component is a helpful utility for controlling the visibility of content:
 
@@ -113,7 +64,7 @@ Visibility(
 )
 
 // Perfect for use in custom tab implementations
-Row {
+Box {
     tabs.forEachIndexed { index, tab ->
         Visibility(
             visible = selectedTabIndex == index,
